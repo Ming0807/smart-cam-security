@@ -174,6 +174,8 @@ GPIO4 is shared: built-in flash LED vs SD_MMC_DATA1 (4-bit SD mode).
 - Use numeric chat ID, not @username
 - Add retry and timeout if supported
 - Send text before photo to isolate issues
+- If photo fails, text + SD save should still work (run `test_full_local_alert_sd`)
+- Check memory: `import gc; print(gc.mem_free())` — photo upload uses extra RAM
 - If `urequests` not found: the firmware build lacks network support
 
 ---

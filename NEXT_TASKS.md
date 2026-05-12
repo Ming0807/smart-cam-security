@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 4C: Trigger + Capture + Save to SD — Code ready.
+Phase 4D: Full Pipeline (Telegram + SD) — Code ready.
 
 ## Verified So Far
 
@@ -13,34 +13,31 @@ Phase 4C: Trigger + Capture + Save to SD — Code ready.
 | HC-SR04 sensor | PASS |
 | Trigger + cooldown | PASS |
 | Flash LED (GPIO4) | PASS |
-| Telegram text alert | PASS |
-| Full pipeline (sensor→Telegram→capture) | PASS |
-| MicroSD mount + read/write | PASS |
-| Camera → SD save | PASS |
-| Trigger → Camera → SD (no Wi-Fi/flash) | READY |
+| Telegram text | PASS |
+| Telegram photo | READY |
+| MicroSD mount (slot=1 width=1) | PASS |
+| Camera → save to SD | PASS |
+| Trigger → Camera → SD | PASS |
+| Trigger → Telegram → Camera → SD → Telegram photo | READY |
 
 ## Active Task: Upload and Run
 
-1. Upload via Thonny:
-   - `firmware/lib/local_event_storage.py` → `/lib/`
-   - `firmware/test_trigger_save_sd.py` → `/`
-2. Power-cycle the board before running (remove old main.py interference)
-3. Run: `import test_trigger_save_sd`
+1. Power-cycle board
+2. Upload via Thonny:
+   - `firmware/lib/full_alert_workflow.py` → `/lib/`
+   - `firmware/lib/telegram_client.py` → `/lib/` (updated with send_photo)
+   - `firmware/test_full_local_alert_sd.py` → `/`
+3. Run: `import test_full_local_alert_sd`
 4. Test:
-   - No object → no capture
-   - Object near (< 50cm) → capture → `motion_sd_YYYYMMDD_HHMMSS.jpg` on /sd
+   - Object near → Telegram text → capture → SD save → Telegram photo
+   - Check Telegram for both text and photo messages
+   - Check SD for motion_sd_*.jpg files
    - Cooldown prevents spam
-   - Ctrl+C clean stop
-
-## SD Mount Rule (IMPORTANT)
-
-SD card must be mounted **before** camera init. Camera init installs GPIO ISR which blocks SD detection.
-
-Order: `SD mount` → `camera init` → `trigger loop`
+   - If photo fails, SD image still saved
 
 ## Next Phase
 
-Phase 5: Next.js API + Supabase
+Phase 5: Next.js API + Supabase (web dashboard)
 
 ## Do Not Work On Yet
 

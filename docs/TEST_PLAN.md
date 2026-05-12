@@ -144,6 +144,18 @@ GPIO4 conflict note: remove MicroSD or use 1-bit SD mode.
 | 6 | Ctrl+C | Summary + camera released | PENDING |
 | 7 | SD files after test | Multiple motion_sd_*.jpg on SD | PENDING |
 
+## Phase 4D: Full Pipeline (Telegram + SD)
+
+| # | Test | Expected | Status |
+|---|---|---|---|
+| 1 | `import lib.full_alert_workflow` | No error | PENDING |
+| 2 | `import test_full_local_alert_sd` | Wi-Fi → SD → Camera → Sensor ready | PENDING |
+| 3 | Object near (< 50cm) | Telegram text → capture → SD save → Telegram photo | PENDING |
+| 4 | Telegram text fails | Still capture + save to SD | PENDING |
+| 5 | Telegram photo fails | SD image still saved, cycle continues | PENDING |
+| 6 | Cooldown | Prevents Telegram spam | PENDING |
+| 7 | Ctrl+C | Camera released, summary | PENDING |
+
 ## Phase 5: API + Dashboard (Future)
 
 | Test | Expected |

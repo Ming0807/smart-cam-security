@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.5.3 - Phase 4D: Full Pipeline (Telegram Text + Photo + SD)
+
+### Added
+
+- `firmware/lib/telegram_client.py` — added `send_photo_message()` via multipart/form-data POST
+- `firmware/lib/full_alert_workflow.py` — `run_detection_alert_cycle()`: text → capture → SD → photo
+- `firmware/test_full_local_alert_sd.py` — full integration test: sensor → trigger → Telegram text → capture → save SD → Telegram photo
+
+### Notes
+
+- Each step independent — text failure doesn't block capture, photo failure doesn't delete SD image
+- No flash LED (GPIO4/SD conflict)
+- SD must mount before camera (ISR conflict)
+- Photo sent via raw socket multipart POST (no urequests)
+
 ## 0.5.2 - Phase 4C: Trigger → Camera → Save to SD
 
 ### Added

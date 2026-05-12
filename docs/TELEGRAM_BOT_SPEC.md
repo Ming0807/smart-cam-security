@@ -29,9 +29,14 @@ Status: Armed
 ## Photo Caption
 
 ```text
-Snapshot from ESP32-CAM
-Distance: 43 cm
+Distance: 43 cm | motion_sd_20260513_021500.jpg
 ```
+
+## Implementation
+
+- Text: `telegram_client.send_text_message()` via raw socket+SSL GET
+- Photo: `telegram_client.send_photo_message()` via multipart/form-data POST
+- Full cycle: `full_alert_workflow.run_detection_alert_cycle()`
 
 ## Inline Buttons
 
