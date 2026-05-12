@@ -13,6 +13,15 @@ AI-Thinker ESP32-CAM
 | HC-SR04 VCC | 5V | Power | Sensor usually requires 5V |
 | HC-SR04 GND | GND | Ground | Shared ground with ESP32-CAM |
 
+## SD Card Pins
+
+| Mode | GPIOs | Conflicts |
+|---|---|---|
+| SD 4-bit | 2, 4, 12, 13, 14, 15 | Flash(GPIO4), Sensor(GPIO12,13) |
+| SD 1-bit | 2, 14, 15 | None — frees 4, 12, 13 |
+
+Use 1-bit mode to use flash + sensor simultaneously.
+
 ## Flash LED
 
 | Function | GPIO | Direction | Notes |

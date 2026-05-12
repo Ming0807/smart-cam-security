@@ -67,7 +67,52 @@ HC-SR04 ECHO -> voltage divider (1kΩ + 2kΩ) -> GPIO 13
 
 GPIO4 conflict note: remove MicroSD or use 1-bit SD mode.
 
-## Phase 3: SD Card
+## Phase 2E: Trigger + Flash + Capture
+
+| # | Test | Expected | Status |
+|---|---|---|---|
+| 1 | `import lib.capture_workflow` | No error | PENDING |
+| 2 | `import test_trigger_flash_capture` | Test starts | PENDING |
+| 3 | Object near (< 50cm) | Flash ON → capture → Flash OFF → `motion_flash_001.jpg` | PENDING |
+| 4 | Object stays near | Cooldown prevents spam, flash stays OFF | PENDING |
+| 5 | Ctrl+C during test | Flash OFF + camera released | PENDING |
+| 6 | Image brighter with flash | JPEG shows flash illumination | PENDING |
+
+## Phase 3A: Telegram Text Message
+
+| # | Test | Expected | Status |
+|---|---|---|---|
+| 1 | `import lib.telegram_client` | No error (or clear urequests warning) | PENDING |
+| 2 | `import test_telegram_text` | Test starts, connects Wi-Fi | PENDING |
+| 3 | Send text message | Message appears in Telegram chat | PENDING |
+| 4 | Missing token | Error: "TELEGRAM_BOT_TOKEN is empty" | PENDING |
+| 5 | Wrong token | Error: HTTP 401 or 404 | PENDING |
+| 6 | No Wi-Fi | Error: Wi-Fi connection failed | PASS |
+
+## Phase 3B: Trigger + Telegram Text Alert
+
+| # | Test | Expected | Status |
+|---|---|---|---|
+| 1 | `import lib.alert_workflow` | No error | PENDING |
+| 2 | `import test_trigger_telegram_text` | Wi-Fi → Camera → Flash → Trigger ready | PENDING |
+| 3 | Object near (< 50cm) | Telegram text sent → flash capture → `alert_001.jpg` | PENDING |
+| 4 | Telegram message format | Thai text: device ID, distance, filename, Armed | PENDING |
+| 5 | Object stays near | Cooldown prevents Telegram spam | PENDING |
+| 6 | Ctrl+C | Flash OFF, Camera released, summary | PENDING |
+
+## Phase 4A: MicroSD Card
+
+| # | Test | Expected | Status |
+|---|---|---|---|
+| 1 | `import lib.sd_storage` | No error | PENDING |
+| 2 | `import test_sd_card` | Test starts | PENDING |
+| 3 | SD mount | Mounts in 1-bit or 4-bit mode | PENDING |
+| 4 | Write `/sd/test_sd.txt` | File written | PENDING |
+| 5 | Read back | Content matches | PENDING |
+| 6 | List files | `test_sd.txt` in list | PENDING |
+| 7 | No SD card inserted | Clear error + troubleshooting tips | PENDING |
+
+## Phase 4B: JPEG to SD
 
 | Test | Expected |
 |---|---|
@@ -75,33 +120,41 @@ GPIO4 conflict note: remove MicroSD or use 1-bit SD mode.
 | Write text file | File on SD |
 | Save JPEG to SD | JPEG with timestamp filename |
 
-## Phase 4: Telegram
+## Phase 4B: JPEG to SD
+
+| # | Test | Expected | Status |
+|---|---|---|---|
+| 1 | `import lib.media_storage` | No error | PENDING |
+| 2 | `import test_camera_save_sd` | Test starts | PENDING |
+| 3 | SD mount | Mounts (slot=1) | PENDING |
+| 4 | Camera init + capture | Captured N bytes | PENDING |
+| 5 | Save JPEG to SD | `cam_test_YYYYMMDD_HHMMSS.jpg` saved | PENDING |
+| 6 | File in SD listing | File visible in list | PENDING |
+| 7 | Transfer file to PC (Thonny) | Valid JPEG image | PENDING |
+
+## Phase 4C: Trigger + Save to SD
+
+| # | Test | Expected | Status |
+|---|---|---|---|
+| 1 | `import lib.local_event_storage` | No error | PENDING |
+| 2 | `import test_trigger_save_sd` | SD mounts → camera ready → trigger ready | PENDING |
+| 3 | Object near (< 50cm) | Capture → `motion_sd_YYYYMMDD_HHMMSS.jpg` on /sd | PENDING |
+| 4 | Object stays near | Cooldown prevents repeated capture | PENDING |
+| 5 | Wait cooldown, trigger again | Second capture → new filename | PENDING |
+| 6 | Ctrl+C | Summary + camera released | PENDING |
+| 7 | SD files after test | Multiple motion_sd_*.jpg on SD | PENDING |
+
+## Phase 5: API + Dashboard (Future)
 
 | Test | Expected |
 |---|---|
-| Send text | Message in chat |
-| Send photo | Image in chat |
-| Invalid token | Error handled |
-
-## Phase 5: API
-
-| Test | Expected |
-|---|---|
-| POST `/api/log` with secret | 200 |
-| POST `/api/log` without secret | 401 |
+| POST `/api/log` | 200 |
 | GET `/api/status` | JSON |
-
-## Phase 6: Dashboard
-
-| Test | Expected |
-|---|---|
 | Dashboard loads | No crash |
-| Event logs visible | Rows |
-| Arm/Disarm | Status changes |
 
 ## Final Acceptance
 
-1. Detect object under 50 cm → capture JPEG → save to SD
+1. Detect < 50cm → capture JPEG → save to SD
 2. Telegram alert (text + photo)
 3. Event in dashboard
 4. Dashboard disarm respected

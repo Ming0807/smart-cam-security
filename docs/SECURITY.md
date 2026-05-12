@@ -6,8 +6,8 @@ Never commit:
 
 - Wi-Fi SSID
 - Wi-Fi password
-- Telegram bot token
-- Telegram chat ID
+- Telegram bot token (stored in `firmware/config.py`)
+- Telegram chat ID (stored in `firmware/config.py`)
 - Supabase service role key
 - Device API secret
 - Tunnel credentials

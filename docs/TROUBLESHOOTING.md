@@ -108,6 +108,29 @@ Verified working on ESP32-D0WD-V3 (2026-05-12).
 
 ---
 
+## SD Card Mount Fails
+
+### Symptoms
+
+- `SD mount failed — all modes tried`
+- `OSError: [Errno 19] ENODEV`
+- `OSError: No SD card`
+
+### Likely Causes
+
+- No SD card inserted or not FAT32 formatted
+- SD > 32GB or poor quality / fake card
+- GPIO conflict with flash LED or sensor
+
+### Fix
+
+- Insert reliable MicroSD (16GB), format as FAT32
+- Use 1-bit SD mode: frees GPIO4/12/13
+- Power-cycle board after inserting SD
+- Run `import test_sd_card` to isolate the issue
+
+---
+
 ## Flash LED / SD Card Conflict (GPIO4)
 
 ### Symptoms
@@ -134,20 +157,24 @@ GPIO4 is shared: built-in flash LED vs SD_MMC_DATA1 (4-bit SD mode).
 - timeout
 - 401 unauthorized
 - no message in chat
+- `urequests not available`
 
 ### Likely Causes
 
 - Wrong bot token
-- Wrong chat ID
-- No internet
-- TLS/network issue
+- Wrong chat ID (must be numeric, not @username)
+- No internet after Wi-Fi connect
+- TLS/SSL not supported by firmware
+- `urequests` module not in firmware build
 
 ### Fix
 
-- Test token separately.
-- Confirm chat ID.
-- Add retry and timeout.
-- Send text before photo.
+- Test token separately: `https://api.telegram.org/bot<TOKEN>/getMe`
+- Find chat ID: `https://api.telegram.org/bot<TOKEN>/getUpdates` (send /start to bot first)
+- Use numeric chat ID, not @username
+- Add retry and timeout if supported
+- Send text before photo to isolate issues
+- If `urequests` not found: the firmware build lacks network support
 
 ---
 
